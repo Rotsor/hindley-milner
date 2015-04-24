@@ -95,6 +95,6 @@ module Rules (TVar : Set) where
 
     let' : forall n s t e0 e1 Γ
       -> gen n Γ ⊢ e0 ∷ s
-      -> (n , s) ∷ Γ ⊢ e1 ∷ t
+      -> push Γ (n , s) ⊢ e1 ∷ t
       ---------------
       -> Γ ⊢ let' e0 e1 ∷ t
