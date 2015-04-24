@@ -1,0 +1,4 @@
+An exercise in agda: formalizing Hindley-Milner type system,
+write a type checher and type inference.
+
+Just started.
