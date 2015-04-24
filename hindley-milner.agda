@@ -66,6 +66,15 @@ module Rules (TVar : Set) where
   subs : ∀ {V} → (s : Schema V) → Inst V (proj₁ s) → Typ V
   subs (_ , t) i = subs' i t
 
+  hmm : forall {TV} m n -> Typ (m +' TV) -> Typ (m +' (n +' TV))
+  hmm m n t = bind t ?
+
+  gen1 : forall {TV} n -> Schema TV -> Schema (n +' TV)
+  gen1 n (m , t) = (m , hmm m n t)
+
+  gen : forall {V TV} n -> Context V TV -> Context V (n +' TV)
+  gen n c v = gen1 n (c v)
+
   data _⊢_∷_ {V TV : Set} : Context V TV → Expr V → Typ TV → Set where 
     var : ∀ x {t} {σ} {Γ} inst
       → subs σ inst ≡ t
@@ -84,4 +93,8 @@ module Rules (TVar : Set) where
       ---------------
       → Γ ⊢ lam e ∷ t [→] t'
 
-    let' : {!!} → {!!} ⊢ {!!} ∷ {!!}
+    let' : forall n s t e0 e1 Γ
+      -> gen n Γ ⊢ e0 ∷ s
+      -> (n , s) ∷ Γ ⊢ e1 ∷ t
+      ---------------
+      -> Γ ⊢ let' e0 e1 ∷ t
